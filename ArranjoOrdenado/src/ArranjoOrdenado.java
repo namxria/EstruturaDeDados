@@ -4,7 +4,6 @@ public class ArranjoOrdenado {
     private int[] arranjo;
     private int tamanho;
     private int capacidade;
-    private boolean crescente;
 
     public ArranjoOrdenado(int capacidade) {
         this.capacidade = capacidade;
@@ -18,28 +17,29 @@ public class ArranjoOrdenado {
         }
     }
 
-    public void inserir(int elemento, boolean crescente){
+    public void inserir(int num, boolean crescente){
         if(tamanho == capacidade) {
             throw new RuntimeException("O arranjo está cheio.");
         }
-        int indice = 0;
+
+        int i = 0;
         if (crescente) {
-            for (indice = 0; indice < tamanho; indice++) {
-                if (elemento < arranjo[indice]) {
+            for (i = 0; i < tamanho; i++) {
+                if (num < arranjo[i]) {
                     break;
                 }
             }
         } else {
-            for (indice = 0; indice < tamanho; indice++) {
-                if (elemento > arranjo[indice]) {
+            for (i = 0; i < tamanho; i++) {
+                if (num > arranjo[i]) {
                     break;
                 }
             }
         }
-        for(int i = tamanho - 1; i >= indice; i--){
-            arranjo[i+1] = arranjo[i];
+        for(int j = tamanho - 1; j >= i; j--){
+            arranjo[j +1] = arranjo[j];
         }
-        arranjo[indice] = elemento;
+        arranjo[i] = num;
         tamanho++;
     }
 
@@ -47,18 +47,24 @@ public class ArranjoOrdenado {
         if(tamanho < 1) {
             throw new RuntimeException("O arranjo está vazio.");
         }
-        int indice = 0;
-        for(indice = 0; indice < tamanho; indice++){
-            if(elemento < arranjo[indice]){
+        boolean decrescente = (tamanho > 1) && (arranjo[0] > arranjo[tamanho - 1]);
+
+        int indice = -1;
+        for(int i = 0; i < tamanho; i++){
+            if(arranjo[i] == elemento){
+                indice = i;
                 break;
             }
+            if (decrescente && arranjo[i] < elemento) break;
+            if (!decrescente && arranjo[i] > elemento) break;
         }
-        if(indice == tamanho - 1){
+        if(indice == -1){
             throw new RuntimeException("O elemento "+elemento+" não está no arranjo.");
         }
-        for(int i = indice ; i < tamanho; i++){
-            arranjo[i-1] = arranjo[i];
+        for(int i = indice ; i < tamanho-1; i++){
+            arranjo[i] = arranjo[i+1];
         }
+
         tamanho--;
     }
 
